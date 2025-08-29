@@ -31,3 +31,26 @@ GRANT INSERT, UPDATE, DELETE ON FUTURE TABLES IN SCHEMA movies.staging TO ROLE m
 
 -- check grants
 SHOW GRANTS TO ROLE movies_dlt_role;
+
+-------------------------------------------------------------------
+
+-- create reader role
+USE ROLE useradmin;
+CREATE ROLE IF NOT EXISTS movies_reader;
+
+-- grant privileges to role
+USE ROLE securityadmin;
+
+GRANT USAGE ON WAREHOUSE dev_wh TO ROLE movies_reader;
+GRANT USAGE ON DATABASE movies TO ROLE movies_reader;
+GRANT USAGE ON SCHEMA movies.staging TO ROLE movies_reader;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA movies.staging TO ROLE movies_reader;
+GRANT SELECT ON FUTURE TABLES IN DATABASE movies TO ROLE movies_reader;
+
+GRANT SELECT ON FUTURE TABLES IN SCHEMA movies.staging TO ROLE movies_reader; --addition
+
+
+GRANT ROLE movies_reader TO USER debbie;
+
+SHOW GRANTS TO ROLE movies_reader;
