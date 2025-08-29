@@ -48,8 +48,6 @@ GRANT USAGE ON SCHEMA movies.staging TO ROLE movies_reader;
 GRANT SELECT ON ALL TABLES IN SCHEMA movies.staging TO ROLE movies_reader;
 GRANT SELECT ON FUTURE TABLES IN DATABASE movies TO ROLE movies_reader;
 
-GRANT SELECT ON FUTURE TABLES IN SCHEMA movies.staging TO ROLE movies_reader; --addition
-
 
 GRANT ROLE movies_reader TO USER debbie;
 
