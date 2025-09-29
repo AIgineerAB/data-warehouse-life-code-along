@@ -4,6 +4,7 @@
 #                      #
 # ==================== #
 
+from pathlib import Path
 import dlt
 import dagster as dg
 from dagster_dlt import DagsterDltResource, dlt_assets
@@ -44,6 +45,22 @@ def dlt_load(context: dg.AssetExecutionContext, dlt: DagsterDltResource):
 #                      #
 # ==================== #
 
+# related paths for dbt project
+dbt_project_directory = Path(__file__).parents[1] / "data_transformation"
+profiles_dir = Path.home() / ".dbt"
+
+# create dagster dbt project object
+dbt_project = DbtProject(project_dir=dbt_project_directory,
+                         profiles_dir=profiles_dir)
+
+dbt_resource = DbtCliResource(project_dir=dbt_project)
+
+# create a manifest json file 
+dbt_project.prepare_if_dev()
+
+# create dagster dbt asset
+@dbt_assets(manifest=dbt_project.manifest_path)
+
 # ==================== #
 #                      #
 #         Job          #
@@ -67,3 +84,7 @@ def dlt_load(context: dg.AssetExecutionContext, dlt: DagsterDltResource):
 #     Definitions      #
 #                      #
 # ==================== #
+
+defs = dg.Definitions(assets=[dlt_load],
+                      resources={"dlt": dlt_resource},
+                      )
