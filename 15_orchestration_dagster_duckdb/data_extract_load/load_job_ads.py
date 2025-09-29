@@ -12,10 +12,13 @@ import json
 from pathlib import Path
 import os
 
+# data warehouse directory
+db_path = str(Path(__file__).parents[1] / "data_warehouse/job_ads.duckdb")
+
 def _get_ads(url_for_search, params):
     headers = {"accept": "application/json"}
     response = requests.get(url_for_search, headers=headers, params=params)
-    response.raise_for_status()  # check for http errors
+    response.raise_for_status()  
     return json.loads(response.content.decode("utf8"))
 
 
@@ -32,7 +35,7 @@ def jobads_resource(params):
 def run_pipeline(table_name):
     pipeline = dlt.pipeline(
         pipeline_name="jobsearch",
-        destination="snowflake",
+        destination=dlt.destinations.duckdb(db_path), #update destination
         dataset_name="staging",
     )
 
