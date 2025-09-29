@@ -23,6 +23,13 @@ db_path = str(Path(__file__).parents[1] / "data_warehouse/job_ads.duckdb")
 #                      #
 # ==================== #
 
+# create dlt resource
+dlt_resource = DagsterDltResource()
+
+# create dlt asset
+
+
+
 # ==================== #
 #                      #
 #       dbt Asset      #
