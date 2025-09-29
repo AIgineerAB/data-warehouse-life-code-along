@@ -27,8 +27,16 @@ db_path = str(Path(__file__).parents[1] / "data_warehouse/job_ads.duckdb")
 dlt_resource = DagsterDltResource()
 
 # create dlt asset
-
-
+@dlt_assets(
+    dlt_source = jobads_source(),
+    dlt_pipeline = dlt.pipeline(
+        pipeline_name="jobsearch",
+        dataset_name="staging",
+        destination=dlt.destinations.duckdb(db_path),
+    ),
+)
+def dlt_load(context: dg.AssetExecutionContext, dlt: DagsterDltResource): 
+    yield from dlt.run(context=context)
 
 # ==================== #
 #                      #
